@@ -1,13 +1,17 @@
-const modal = document.querySelector('.modal');
-const btnOpenModal = document.querySelector('.modal-click');
+const modal = document.querySelectorAll('.modal');
+const btnOpenModal = document.querySelectorAll('.modal-click');
+const closeButton = document.querySelectorAll('.modal-close');
 
-const closeButton = document.querySelector('.modal-close');
-const popupContainer = document.getElementById("popupContainer");
-
-btnOpenModal.addEventListener("click", () => {
-  popupContainer.style.display = "flex";
+btnOpenModal.forEach((btn, i) => {
+  btn.addEventListener("click", () => {
+    modal[i].style.display = "flex";
+    btn.style.cssText = 'border-color: transparent';
+  });
 });
 
-closeButton.addEventListener("click", () => {
-  popupContainer.style.display = "none";
+closeButton.forEach((btn, i) => {
+  btn.addEventListener("click", () => {
+    modal[i].style.display = "none";
+    btnOpenModal[i].style.cssText = 'border-color: black';
+  });
 });
