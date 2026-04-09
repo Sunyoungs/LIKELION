@@ -13,6 +13,7 @@ root.render(
 );
 */
 
+/*
 import GrandParent from './GrandParent';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -21,3 +22,13 @@ root.render(
     <GrandParent />
   </React.StrictMode>
 )
+*/
+
+import Appre from './App-re';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <Appre />
+  </React.StrictMode>
+);
