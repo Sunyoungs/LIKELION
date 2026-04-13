@@ -1,0 +1,1 @@
+console.log('node.js 환경입니다.')
