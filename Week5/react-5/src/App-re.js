@@ -91,6 +91,28 @@ class CounterClass extends Component {
   }
 }
 
+const CounterFunction = () => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (count>10) {
+      console.log("카운트가 10을 초과했습니다!");
+    }
+  }, [count]);
+
+  const increment = () => {
+    setCount(count+1);
+  };
+
+  return (
+    <div>
+      <h2>함수형 컴포넌트</h2>
+      <p>카운트: {count}</p>
+      <button onClick={increment}>카운트 증가</button>
+    </div>
+  );
+};
+
 export default function App() {
   return (
     <div>
