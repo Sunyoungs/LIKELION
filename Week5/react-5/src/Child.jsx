@@ -11,6 +11,7 @@ function Child({user}) {
 }
 */
 
+/* props drilling 수정 후
 import React, { useContext } from 'react';
 import UserContext from './UserContext';
 
@@ -25,3 +26,30 @@ function Child({}) {
 }
 
 export default Child;
+*/
+
+import React from 'react';
+
+/* 리렌더링 -> 최소화하기
+export default function Child() {
+  console.log("Child rendered");
+
+  return (
+    <div>
+      <h4>Child 컴포넌트</h4>
+    </div>
+  );
+}
+*/
+
+function Child() {
+  console.log("Child rendered");
+
+  return (
+    <div>
+      <h4>Child 컴포넌트</h4>
+    </div>
+  );
+}
+
+export default React.memo(Child);

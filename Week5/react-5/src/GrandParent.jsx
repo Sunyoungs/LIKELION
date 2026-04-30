@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Parent from './Parent';
 
 /* prop drilling 수정 전
@@ -12,6 +12,7 @@ function GrandParent() {
 }
 */
 
+/* props drilling 수정 후
 import UserContext from './UserContext';
 
 function GrandParent() {
@@ -26,3 +27,19 @@ function GrandParent() {
 }
 
 export default GrandParent;
+*/
+
+export default function GrandParent() {
+  const [count, setCount] = useState(0);
+
+  console.log("GrandParent rendered");
+
+  return (
+    <div>
+      <h2>GrandParent 컴포넌트</h2>
+      <button onClick={() => setCount(count+1)}>GrandParent 버튼</button>
+      <p>count: {count}</p>
+      <Parent />
+    </div>
+  );
+}
