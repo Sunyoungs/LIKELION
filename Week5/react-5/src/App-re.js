@@ -32,6 +32,7 @@ function Parent() {
 export default Parent;
 */
 
+/* useMemo 함수
 import React, {useState, useMemo} from 'react';
 
 function heavyCalculation(num) {
@@ -59,3 +60,42 @@ function Calculator() {
 }
 
 export default Calculator;
+*/
+
+import React, {useState, useEffect, Component} from 'react';
+
+class CounterClass extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+  }
+
+  increment = () => {
+    this.setState({ count: this.state.count+1 });
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.count>10 && prevState.count<=10) {
+      console.log("카운트가 10을 초과했습니다!");
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <h2>클래스형 컴포넌트</h2>
+        <p>카운드: {this.state.count}</p>
+        <button onClick={this.increment}>카운트 증가</button>
+      </div>
+    );
+  }
+}
+
+export default function App() {
+  return (
+    <div>
+      <CounterClass />
+      <CounterFunction />
+    </div>
+  );
+}
