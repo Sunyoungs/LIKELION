@@ -2,6 +2,7 @@ import React, { useState, useEffect, use } from 'react';
 import MovieCard from './MovieCard';
 import FavoritesList from './FavoritesList';
 import './MovieFavorites.css';
+import axios from 'axios'; 
 
 const API_URL = 'https://6a17e7621878294b597c07eb.mockapi.io/favorites';
 
@@ -43,8 +44,7 @@ function MovieFavorites() {
     poster: 'https://image.tmdb.org/t/p/w300/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg'
   }
   ];
-
-  // GET: 찜한 영화 목록 조회
+  /* 기존 코드
   const fetchFavorites = () => {
     setLoading(true);
     fetch(API_URL)
@@ -60,9 +60,38 @@ function MovieFavorites() {
     .finally(() => {
       setLoading(false);
     });
+  };*/
+  /* axios 리팩토링
+  const fetchFavorites = () => {
+    setLoading(true);
+    axios.get(API_URL)
+    .then(response => {
+      setFavorites(response.data);
+      setError(null);
+    })
+    .catch(err => {
+      setError('찜한 영화 목록을 불러오는데 실패했습니다.');
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+  };
+  */
+  // GET: 찜한 영화 목록 조회, async/await 리팩토링
+  const fetchFavorites = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(API_URL);
+      setFavorites(response.data);
+      setError(null);
+    } catch (err) {
+      setError('찜한 영화 목록을 불러오는데 실패했습니다.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // POST: 영화 찜하기
+  /* 기존 코드
   const addToFavorites = (movie) => {
     fetch(API_URL, {
       method: 'POST',
@@ -86,8 +115,43 @@ function MovieFavorites() {
       console.error(err);
     });
   };
+  */
+  /* axios 리팩토링
+  const addToFavorites = (movie) => {
+    axios.post(API_URL, {
+      movieId: movie.id,
+      title: movie.title,
+      poster: movie.poster,
+      addedAt: new Date().toISOString()
+    })
+    .then(response => {
+      setFavorites(prev => [...prev, response.data]);
+      alert(`"${movie.title}"을(를) 찜 목록에 추가했습니다!`);
+    })
+    .catch(err => {
+      alert('찜하기에 실패했습니다.');
+      console.error(err);
+    });
+  };
+  */
+  // POST: 영화 찜하기, async/await 리팩토링
+  const addToFavorites = async (movie) => {
+    try {
+      const response = await axios.post(API_URL, {
+        movieId: movie.id,
+        title: movie.title,
+        poster: movie.poster,
+        addedAt: new Date().toISOString()
+      });
+      setFavorites(prev => [...prev, response.data]);
+      alert(`"${movie.title}"을(를) 찜 목록에 추가했습니다!`);
+    } catch (err) {
+      alert('찜하기에 실패했습니다.');
+      console.error(err);
+    }
+  };
 
-  // DELETE: 찜 취소
+  /* 기존 코드
   const removeFromFavorites = (favoriteId, title) => {
     const confirmDelete = window.confirm(`"${title}"을(를) 찜 목록에서 제거하시겠습니까?`);
     if (!confirmDelete) return;
@@ -103,6 +167,36 @@ function MovieFavorites() {
       alert('찜 취소에 실패했습니다.');
       console.error(err);
     });
+  };
+  */
+  /* axios 리팩토링
+  const removeFromFavorites = (favoriteId, title) => {
+    const confirmDelete = window.confirm(`"${title}"을(를) 찜 목록에서 제거하시겠습니까?`);
+    if (!confirmDelete) return;
+
+    axios.delete(`${API_URL}/${favoriteId}`)
+    .then(() => {
+      setFavorites(prev => prev.filter(fav => fav.id !== favoriteId));
+      alert(`"${title}"을(를) 찜 목록에서 제거했습니다.`);
+    })
+    .catch(err => {
+      alert('찜 취소에 실패했습니다.');
+      console.error(err);
+    });
+  };
+  */
+  // DELETE: 찜 취소, async/await 리팩토링
+  const removeFromFavorites = async (favoriteId, title) => {
+    const confirmDelete = window.confirm(`"${title}"을(를) 찜 목록에서 제거하시겠습니까?`);
+    if (!confirmDelete) return;
+    try {
+      const response = await axios.delete(`${API_URL}/${favoriteId}`);
+      setFavorites(prev => prev.filter(fav => fav.id !== favoriteId));
+      alert(`"${title}"을(를) 찜 목록에서 제거했습니다.`);
+    } catch (err) {
+      alert('찜 취소에 실패했습니다.');
+      console.error(err);
+    }
   };
 
   // 영화가 이미 찜되어 있는지 확인
